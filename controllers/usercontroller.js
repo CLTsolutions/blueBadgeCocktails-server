@@ -1,11 +1,10 @@
-let express = require('express')
-let router = express.Router()
+const router = require('express').Router();
+const User = require('../db').import('../models/user');
+// const user = require('../models/user')
 
-let db = require('../db')
-const user = require('../models/user')
-const User = db.import('../models/user')
-
-//register
+/***************************
+     * USER REGISTER *
+****************************/
 router.post('/register', (req, res) => {
     User.create({
         email: req.body.user.email,
@@ -15,7 +14,7 @@ router.post('/register', (req, res) => {
         console.log(user);
         res.status(200).json({
             user: user,
-            message: 'User create worked.'
+            message: 'Bartender is now registered.'
         })
     })
     .catch((err) => {
@@ -25,9 +24,32 @@ router.post('/register', (req, res) => {
         })
     })
 })
-//login
+
+
+/***************************
+      * USER LOGIN*
+****************************/
 router.post('/login', (req, res) => {
-    res.send('This is the login route')
+    User.findOne({
+        where: {
+            email: req.body.user.email
+        }
+    })
+    .then((user) => {
+        if (user === null) {
+            return res.status(404).json({ message: "user not found" });
+        } else {
+            res.status(200).json({
+                user: user
+            })
+        }
+    })
+    .catch((err) => {
+        console.log('failed to find user.')
+        res.status(500).json({
+            error: 'You are not logged in.'
+        })
+    })
 })
 
-module.exports = router
+module.exports = router;
