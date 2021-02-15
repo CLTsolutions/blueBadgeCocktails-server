@@ -1,4 +1,3 @@
-//never calling a function - just creating a variable to be used
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define('user', {
         //these are columns in the table
