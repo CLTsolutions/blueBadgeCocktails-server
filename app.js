@@ -1,16 +1,18 @@
-let express = require('express')
-let app = express()
-let sequelize = require('./db')
-let cocktail = require('./controllers/cocktailcontroller')
-let user = require('./controllers/usercontroller')
+const express = require('express')
+const app = express()
+const sequelize = require('./db')
+app.use(express.json())
+
+const user = require('./controllers/usercontroller')
+const cocktail = require('./controllers/cocktailcontroller')
 
 sequelize.sync()
-
-app.use(express.json())
+//sequelize.sync({force:true}) - THIS RESETS DB
 
 app.use('/bartender', user)
 
-//will be protected route
+//will be protected route (need to add in validate-session later)
+//app.use(require("./middleware/validate-session"));
 app.use('/mybar', cocktail)
 
 app.listen(3000, () => {

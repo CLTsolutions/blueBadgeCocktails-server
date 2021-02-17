@@ -1,20 +1,23 @@
-let express = require('express')
-let router = express.Router()
+const express = require('express')
+const router = express.Router()
 const Cocktail = require('../db').import('../models/cocktail')
 
 /************************
     * RECIPE CREATE *
 *************************/
-router.post('/', (req, res) => {
+//change route and user id req once ready for validation
+router.post('/:id', (req, res) => {
     const cocktailEntry = {
-        name: req.body.cocktail.name,
-        alcoholic: req.body.cocktail.alcoholic,
-        glassType: req.body.cocktail.glassType,
-        ingredients: req.body.cocktail.ingredients,
-        instructions: req.body.cocktail.instructions,
-        iced: req.body.cocktail.iced,
-        shaken: req.body.cocktail.shaken,
-        stirred: req.body.cocktail.stirred
+        name: req.body.name,
+        alcoholic: req.body.alcoholic,
+        glassType: req.body.glassType,
+        ingredients: req.body.ingredients,
+        instructions: req.body.instructions,
+        iced: req.body.iced,
+        shaken: req.body.shaken,
+        stirred: req.body.stirred,
+        //userId: req.user.id - to use once we have validate session
+        userId: req.params.id
     }
     Cocktail.create(cocktailEntry)
         .then(logs => res.status(200).json(logs))
@@ -24,21 +27,54 @@ router.post('/', (req, res) => {
 /*******************************
   * GET ALL COCKTAILS BY USER *
 ********************************/
-router.get("/", (req, res) => {
-    Log.findAll({ where: { owner_id: req.user.id } })
-    .then(logs => res.status(200).json(logs))
-    .catch(err => res.status(500).json({ error: err }))
+router.get("/:id", (req, res) => {
+    Cocktail.findAll({ where: { userId: req.params.id } })
+        .then((cocktails) => {
+            if (cocktails.length === 0)
+                return res.status(200).json({ message: "No cocktails were found! Try creating one." });
+            res.status(200).json({ cocktails });
+    })
+    .catch((error) => {
+        res.status(500).json({ error });
+    });
+});
+
+/*******************************
+  * SEARCH COCKTAILS BY NAME *
+********************************/
+router.get("/cocktails/:name", (req, res) => {
+    Cocktail.findAll({ where: { name: req.params.name } })
+        .then((cocktails) => {
+            if (cocktails.length === 0)
+                return res.status(200).json({ message: "No cocktails were found! Try creating one." });
+            res.status(200).json({ cocktails });
+    })
+    .catch((error) => {
+        res.status(500).json({ error });
+    });
 });
 
 /*******************************
    * UPDATE COCKTAIL RECIPE *
 ********************************/
+router.put("/:id", (req, res) => {
+    Cocktail.update(req.body, {
+        where: { id: req.params.id },
+    })
+        .then((response) => {
+            res.status(200).json({ message: "Your cocktail has been updated.", response });
+        })
+        .catch((error) => {
+            res.status(500).json(error);
+        });
+});
 
 /*************************
     * DELETE COCKTAIL *
 **************************/
+//add second where 'userId: req.user.id' once we add validate session
 router.delete("/:id", (req, res) => {
-    Cocktail.destroy({ where: {id: req.params.id}})
+    Cocktail.destroy({ where: { id: req.params.id } })
     .then((result) => {
         if (result) {
             return res.status(200).json({ message: `Successfully deleted ${result}`})
