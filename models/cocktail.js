@@ -32,9 +32,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.BOOLEAN,
             allowNull: false
         },
-        owner_id: {
-            type: DataTypes.INTEGER,
-        }
+        userId: {
+          type: DataTypes.INTEGER,
+          allowNull: false
+        },
     })
     return Cocktail;
 };
