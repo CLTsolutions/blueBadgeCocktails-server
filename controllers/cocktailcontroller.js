@@ -12,6 +12,7 @@ router.post('/:id', (req, res) => {
         alcoholic: req.body.alcoholic,
         glassType: req.body.glassType,
         ingredients: req.body.ingredients,
+        measurements: req.body.measurements,
         instructions: req.body.instructions,
         iced: req.body.iced,
         shaken: req.body.shaken,

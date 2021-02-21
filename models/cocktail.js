@@ -16,6 +16,11 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
+        //added measurements model -cr
+        measurements: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
         instructions: {
             type: DataTypes.STRING,
             allowNull: false,
