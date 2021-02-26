@@ -1,13 +1,16 @@
 const express = require('express')
+const cors = require('cors')
 const app = express()
 const sequelize = require('./db')
-app.use(express.json())
 
 const user = require('./controllers/usercontroller')
 const cocktail = require('./controllers/cocktailcontroller')
 
 sequelize.sync()
+app.use(cors())
 //sequelize.sync({force:true}) - THIS RESETS DB
+app.use(require("./headers/headers"));
+app.use(express.json())
 
 app.use('/bartender', user)
 
