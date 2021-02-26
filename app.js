@@ -1,23 +1,19 @@
-let express = require('express')
-let app = express()
-
-let sequelize = require('./db')
-let user = require('./controllers/usercontroller')
-
-sequelize.sync()
-
-//This is the router we exported from the file
-let simple = require('./controllers/simplecontrollers')
-
-
-//This is express handing off matching endpoint calls
-//to 'localhost:3000/simple
-//The Controller will handle the rest
-//app.use('simple',simple)
-
+const express = require('express')
+const app = express()
+const sequelize = require('./db')
 app.use(express.json())
 
-app.use('/user', user)
+const user = require('./controllers/usercontroller')
+const cocktail = require('./controllers/cocktailcontroller')
+
+sequelize.sync()
+//sequelize.sync({force:true}) - THIS RESETS DB
+
+app.use('/bartender', user)
+
+//will be protected route (need to add in validate-session later)
+//app.use(require("./middleware/validate-session"));
+app.use('/mybar', cocktail)
 
 app.listen(3000, () => {
     console.log('App is running on 3000');

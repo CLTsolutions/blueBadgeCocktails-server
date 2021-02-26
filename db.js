@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
 
 const sequelize = new Sequelize (
-    'express-demo',
+    'blue-badge-cocktails',
     'postgres',
     'password', {
         host: 'localhost',
