@@ -6,7 +6,6 @@ const Cocktail = require('../db').import('../models/cocktail');
 /************************
     * RECIPE CREATE *
 *************************/
-//change route and user id req once ready for validation
 router.post('/',validateSession, ( req, res) => {
     const cocktailEntry = {
         name: req.body.name,
@@ -59,8 +58,19 @@ router.get("/cocktails/:name", (req, res) => {
    * UPDATE COCKTAIL RECIPE *
 ********************************/
 router.put("/:id", validateSession, (req, res) => {
-    Cocktail.update(req.body, {
-        where: { id: req.params.id },
+    const cocktailUpdate = {
+        name: req.body.name,
+        alcoholic: req.body.alcoholic,
+        glassType: req.body.glassType,
+        ingredients: req.body.ingredients,
+        measurements: req.body.measurements,
+        instructions: req.body.instructions,
+        iced: req.body.iced,
+        shaken: req.body.shaken,
+        stirred: req.body.stirred
+    }
+    Cocktail.update(cocktailUpdate, {
+        where: { id: req.params.id, userId: req.user.id },
     })
         .then((response) => {
             res.status(200).json({ message: "Your cocktail has been updated.", response });
@@ -73,9 +83,8 @@ router.put("/:id", validateSession, (req, res) => {
 /*************************
     * DELETE COCKTAIL *
 **************************/
-//add second where 'userId: req.user.id' once we add validate session
 router.delete("/:id", validateSession, (req, res) => {
-    Cocktail.destroy({ where: { id: req.params.id } })
+    Cocktail.destroy({ where: { id: req.params.id, userId: req.user.id } })
     .then((result) => {
         if (result) {
             return res.status(200).json({ message: `Successfully deleted ${result}`})

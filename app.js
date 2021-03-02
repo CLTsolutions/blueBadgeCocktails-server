@@ -8,6 +8,7 @@ const cocktail = require('./controllers/cocktailcontroller')
 
 sequelize.sync()
 //sequelize.sync({force:true}) - THIS RESETS DB
+
 app.use(cors())
 app.use(require("./middleware/headers"));
 app.use(express.json())
