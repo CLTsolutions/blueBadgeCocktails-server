@@ -1,7 +1,7 @@
 const express = require('express')
+const cors = require('cors')
 const app = express()
 const sequelize = require('./db')
-app.use(express.json())
 
 const user = require('./controllers/usercontroller')
 const cocktail = require('./controllers/cocktailcontroller')

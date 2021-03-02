@@ -1,3 +1,4 @@
+require("dotenv").config();
 const router = require('express').Router();
 const User = require('../db').import('../models/user');
 const jwt = require("jsonwebtoken");
@@ -10,7 +11,7 @@ const bcrypt = require('bcryptjs');
 router.post('/register', (req, res) => {
     User.create({
         email: req.body.user.email,
-        password: bcrypt.hashSync (req.body.user.password, 13)
+        password: bcrypt.hashSync(req.body.user.password, 13)
     })
     .then((user) => {
         console.log(user);
