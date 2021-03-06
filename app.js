@@ -17,6 +17,6 @@ app.use('/bartender', user)
 
 app.use('/mybar', cocktail)
 
-app.listen(3000, () => {
-    console.log('App is running on 3000');
+app.listen(process.env.PORT, () => {
+    console.log(`App is running on ${process.env.PORT}`);
 })
