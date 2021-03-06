@@ -13,7 +13,6 @@ router.post('/register', (req, res) => {
         password: bcrypt.hashSync(req.body.user.password, 13)
     })
     .then((user) => {
-        console.log(user);
         const token = jwt.sign({ id: user.id}, process.env.JWT_SECRET, { expiresIn: 60*60*24});
 
         res.status(200).json({
@@ -24,7 +23,6 @@ router.post('/register', (req, res) => {
     }
 )
     .catch((err) => {
-        console.log('failed to save a bartender.')
         res.status(500).json({
             error: 'Register did not work.'
         })
@@ -62,7 +60,6 @@ router.post('/login', (req, res) => {
     }
 })
     .catch((err) => {
-        console.log('failed to find user.')
         res.status(500).json({
             error: 'You are not logged in.'
         })

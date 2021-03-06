@@ -1,17 +1,12 @@
 const Sequelize = require('sequelize')
 
-const sequelize = new Sequelize (
-    'blue-badge-cocktails',
-    'postgres',
-    'password', {
-        host: 'localhost',
-        dialect: 'postgres',
-    }
-)
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+        dialect: 'postgres'
+    })
 
 sequelize.authenticate()
     .then(() => {
-        console.log('Connection to the Database express-demo');
+        console.log('Connection to the Database');
     })
     .catch((err) => {
         console.log(err);
